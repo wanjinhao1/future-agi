@@ -17560,6 +17560,12 @@ export interface HarnessReleaseAgentRequestApi {
    * @maxLength 255
    */
   idempotency_key: string;
+  /**
+   * Worlds the composition's runs use side by side; admission may lower it. Omitted: as many as this deployment admits.
+   * @minimum 1
+   * @maximum 8
+   */
+  parallelism?: number;
 }
 
 export type HarnessJobReadApiReceiptsItem = { [key: string]: unknown };
@@ -18697,6 +18703,12 @@ export interface HarnessHostedAgentRequestApi {
    * @maxLength 255
    */
   idempotency_key: string;
+  /**
+   * Worlds the composition's runs use side by side; admission may lower it. Omitted: as many as this deployment admits.
+   * @minimum 1
+   * @maximum 8
+   */
+  parallelism?: number;
 }
 
 export interface HarnessHostedAgentResponseApi {

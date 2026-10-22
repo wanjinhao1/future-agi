@@ -35408,6 +35408,8 @@ export const simulateApiHarnessAdaptationsCreateBodyNameMax = 255;
 
 export const simulateApiHarnessAdaptationsCreateBodyIdempotencyKeyMax = 255;
 
+export const simulateApiHarnessAdaptationsCreateBodyParallelismMax = 8;
+
 export const SimulateApiHarnessAdaptationsCreateBody = zod.object({
   suite_id: zod.string().uuid(),
   agent_version_id: zod.string().uuid(),
@@ -35464,6 +35466,14 @@ export const SimulateApiHarnessAdaptationsCreateBody = zod.object({
     .string()
     .min(1)
     .max(simulateApiHarnessAdaptationsCreateBodyIdempotencyKeyMax),
+  parallelism: zod
+    .number()
+    .min(1)
+    .max(simulateApiHarnessAdaptationsCreateBodyParallelismMax)
+    .optional()
+    .describe(
+      "Worlds the composition's runs use side by side; admission may lower it. Omitted: as many as this deployment admits.",
+    ),
 });
 
 /**
@@ -36711,6 +36721,8 @@ export const simulateApiHarnessHostedAgentsCreateBodyInstructionsMax = 65536;
 
 export const simulateApiHarnessHostedAgentsCreateBodyIdempotencyKeyMax = 255;
 
+export const simulateApiHarnessHostedAgentsCreateBodyParallelismMax = 8;
+
 export const SimulateApiHarnessHostedAgentsCreateBody = zod.object({
   suite_id: zod.string().uuid(),
   name: zod
@@ -36726,6 +36738,14 @@ export const SimulateApiHarnessHostedAgentsCreateBody = zod.object({
     .string()
     .min(1)
     .max(simulateApiHarnessHostedAgentsCreateBodyIdempotencyKeyMax),
+  parallelism: zod
+    .number()
+    .min(1)
+    .max(simulateApiHarnessHostedAgentsCreateBodyParallelismMax)
+    .optional()
+    .describe(
+      "Worlds the composition's runs use side by side; admission may lower it. Omitted: as many as this deployment admits.",
+    ),
 });
 
 /**

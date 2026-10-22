@@ -64304,6 +64304,14 @@ export const OPENAPI_CONTRACT = Object.freeze({
           maxLength: 255,
           minLength: 1,
         },
+        parallelism: {
+          title: "Parallelism",
+          description:
+            "Worlds the composition's runs use side by side; admission may lower it. Omitted: as many as this deployment admits.",
+          type: "integer",
+          maximum: 8,
+          minimum: 1,
+        },
       },
     },
     HarnessHostedAgentResponse: {
@@ -64775,6 +64783,14 @@ export const OPENAPI_CONTRACT = Object.freeze({
           type: "string",
           maxLength: 255,
           minLength: 1,
+        },
+        parallelism: {
+          title: "Parallelism",
+          description:
+            "Worlds the composition's runs use side by side; admission may lower it. Omitted: as many as this deployment admits.",
+          type: "integer",
+          maximum: 8,
+          minimum: 1,
         },
       },
     },
