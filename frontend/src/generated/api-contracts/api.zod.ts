@@ -31666,7 +31666,7 @@ export const simulateAgentDefinitionsCreateCreateBodyObservabilityEnabledDefault
   false;
 export const simulateAgentDefinitionsCreateCreateBodyLivekitUrlMax = 500;
 
-export const simulateAgentDefinitionsCreateCreateBodyLivekitMaxConcurrencyMax = 5;
+export const simulateAgentDefinitionsCreateCreateBodyLivekitMaxConcurrencyMax = 25;
 
 export const SimulateAgentDefinitionsCreateCreateBody = zod.object({
   agent_name: zod
@@ -31892,7 +31892,7 @@ export const simulateAgentDefinitionsEditUpdateBodyAgentNameMax = 255;
 
 export const simulateAgentDefinitionsEditUpdateBodyLivekitUrlMax = 500;
 
-export const simulateAgentDefinitionsEditUpdateBodyLivekitMaxConcurrencyMax = 5;
+export const simulateAgentDefinitionsEditUpdateBodyLivekitMaxConcurrencyMax = 25;
 
 export const SimulateAgentDefinitionsEditUpdateBody = zod.object({
   observability_enabled: zod.boolean().optional(),
@@ -32192,7 +32192,7 @@ export const simulateAgentDefinitionsVersionsCreateCreateBodyLivekitApiSecretMax
 
 export const simulateAgentDefinitionsVersionsCreateCreateBodyLivekitAgentNameMax = 255;
 
-export const simulateAgentDefinitionsVersionsCreateCreateBodyLivekitMaxConcurrencyMax = 5;
+export const simulateAgentDefinitionsVersionsCreateCreateBodyLivekitMaxConcurrencyMax = 25;
 
 export const simulateAgentDefinitionsVersionsCreateCreateBodyCommitMessageDefault = ``;
 
@@ -35419,6 +35419,7 @@ export const SimulateApiHarnessAdaptationsCreateBody = zod.object({
       "retell_chat",
       "phone",
       "auto",
+      "hosted_agent",
     ]),
     mode: zod
       .enum(["connect_only", "environment_backed", "provider_import"])
@@ -35463,80 +35464,6 @@ export const SimulateApiHarnessAdaptationsCreateBody = zod.object({
     .string()
     .min(1)
     .max(simulateApiHarnessAdaptationsCreateBodyIdempotencyKeyMax),
-});
-
-/**
- * Compose a release suite with an agent through a canonical binding, no adaptation.
- */
-export const simulateApiHarnessCompositionsCreateBodyAgentConfigDefault = {};
-export const simulateApiHarnessCompositionsCreateBodyAgentSecretRefsKeyMax = 255;
-
-export const simulateApiHarnessCompositionsCreateBodyAgentSecretRefsVersionMax = 255;
-
-export const simulateApiHarnessCompositionsCreateBodyAgentSecretRefsDefault =
-  {};
-export const simulateApiHarnessCompositionsCreateBodyNameMax = 255;
-
-export const simulateApiHarnessCompositionsCreateBodyIdempotencyKeyMax = 255;
-
-export const SimulateApiHarnessCompositionsCreateBody = zod.object({
-  suite_id: zod.string().uuid(),
-  agent_version_id: zod.string().uuid(),
-  agent: zod.object({
-    connector: zod.enum([
-      "livekit",
-      "vapi",
-      "retell",
-      "retell_chat",
-      "phone",
-      "auto",
-    ]),
-    mode: zod
-      .enum(["connect_only", "environment_backed", "provider_import"])
-      .optional(),
-    call_direction: zod
-      .enum(["inbound", "outbound"])
-      .optional()
-      .describe(
-        "inbound: the simulated caller dials the agent. outbound: the agent dials the simulated caller. Voice connectors only.",
-      ),
-    config: zod
-      .object({})
-      .passthrough()
-      .default(simulateApiHarnessCompositionsCreateBodyAgentConfigDefault),
-    secret_refs: zod
-      .record(
-        zod.string(),
-        zod.object({
-          manager: zod.enum(["platform-vault", "platform-config"]),
-          key: zod
-            .string()
-            .min(1)
-            .max(simulateApiHarnessCompositionsCreateBodyAgentSecretRefsKeyMax),
-          version: zod
-            .string()
-            .min(1)
-            .max(
-              simulateApiHarnessCompositionsCreateBodyAgentSecretRefsVersionMax,
-            )
-            .optional(),
-          purpose: zod.enum([
-            "target_provider",
-            "simulator_provider",
-            "source_checkout",
-          ]),
-        }),
-      )
-      .default(simulateApiHarnessCompositionsCreateBodyAgentSecretRefsDefault),
-  }),
-  name: zod
-    .string()
-    .min(1)
-    .max(simulateApiHarnessCompositionsCreateBodyNameMax),
-  idempotency_key: zod
-    .string()
-    .min(1)
-    .max(simulateApiHarnessCompositionsCreateBodyIdempotencyKeyMax),
 });
 
 /**
@@ -35820,6 +35747,20 @@ export const SimulateApiHarnessEnvironmentsReadResponse = zod.object({
       name: zod.string().min(1),
       parent_digest: zod.string().min(1),
       policy_profile: zod.object({}).passthrough(),
+      unscored_agent_rules: zod
+        .array(
+          zod
+            .object({
+              id: zod.string().min(1),
+              text: zod.string(),
+            })
+            .describe(
+              "The environment's agent_policy rules no scenario in this suite grades.",
+            ),
+        )
+        .describe(
+          "The environment's agent_policy rules no scenario in this suite grades.",
+        ),
       scenarios: zod.array(
         zod.object({
           key: zod.string().min(1),
@@ -36068,6 +36009,20 @@ export const SimulateApiHarnessEnvironmentsPartialUpdateResponse = zod.object({
       name: zod.string().min(1),
       parent_digest: zod.string().min(1),
       policy_profile: zod.object({}).passthrough(),
+      unscored_agent_rules: zod
+        .array(
+          zod
+            .object({
+              id: zod.string().min(1),
+              text: zod.string(),
+            })
+            .describe(
+              "The environment's agent_policy rules no scenario in this suite grades.",
+            ),
+        )
+        .describe(
+          "The environment's agent_policy rules no scenario in this suite grades.",
+        ),
       scenarios: zod.array(
         zod.object({
           key: zod.string().min(1),
@@ -36379,6 +36334,20 @@ export const SimulateApiHarnessEnvironmentsEvaluationsSetToolCallEvaluationRespo
         name: zod.string().min(1),
         parent_digest: zod.string().min(1),
         policy_profile: zod.object({}).passthrough(),
+        unscored_agent_rules: zod
+          .array(
+            zod
+              .object({
+                id: zod.string().min(1),
+                text: zod.string(),
+              })
+              .describe(
+                "The environment's agent_policy rules no scenario in this suite grades.",
+              ),
+          )
+          .describe(
+            "The environment's agent_policy rules no scenario in this suite grades.",
+          ),
         scenarios: zod.array(
           zod.object({
             key: zod.string().min(1),
@@ -36734,6 +36703,32 @@ export const SimulateApiHarnessEnvironmentsRunsRunReportResponse = zod.object({
 });
 
 /**
+ * Compose our own agent with a release suite; it answers the composed environment.
+ */
+export const simulateApiHarnessHostedAgentsCreateBodyNameMax = 255;
+
+export const simulateApiHarnessHostedAgentsCreateBodyInstructionsMax = 65536;
+
+export const simulateApiHarnessHostedAgentsCreateBodyIdempotencyKeyMax = 255;
+
+export const SimulateApiHarnessHostedAgentsCreateBody = zod.object({
+  suite_id: zod.string().uuid(),
+  name: zod
+    .string()
+    .min(1)
+    .max(simulateApiHarnessHostedAgentsCreateBodyNameMax),
+  instructions: zod
+    .string()
+    .min(1)
+    .max(simulateApiHarnessHostedAgentsCreateBodyInstructionsMax),
+  model: zod.enum(["vertex_ai/gemini-3.7-flash", "vertex_ai/gemini-3.8-flash"]),
+  idempotency_key: zod
+    .string()
+    .min(1)
+    .max(simulateApiHarnessHostedAgentsCreateBodyIdempotencyKeyMax),
+});
+
+/**
  * Validates the v1.6 request contract and delegates execution to the public backend selected by
 ``settings.HARNESS_PROVIDER`` (``hosted`` or ``sandbox``). The hosted backend independently
 selects its managed sandbox runtime.
@@ -37070,6 +37065,7 @@ export const SimulateApiHarnessJobsCreateBody = zod.object({
       "retell_chat",
       "phone",
       "auto",
+      "hosted_agent",
     ]),
     mode: zod
       .enum(["connect_only", "environment_backed", "provider_import"])
@@ -37408,6 +37404,7 @@ export const SimulateApiHarnessJobsPreflightBody = zod.object({
       "retell_chat",
       "phone",
       "auto",
+      "hosted_agent",
     ]),
     mode: zod
       .enum(["connect_only", "environment_backed", "provider_import"])
